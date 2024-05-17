@@ -17,7 +17,7 @@ public class Encrypt {
         Files files = new Files();
         String text = files.readfile("encrypted.txt");
         String encodedkey = files.readfile("key.txt");
-        SecretKey key = toSecretKey(encodedkey);
+        SecretKey key = files.toSecretKey(encodedkey);
         System.out.println(encrypt(text, key));
     }
 
@@ -34,11 +34,5 @@ public class Encrypt {
         } catch (Exception e) {
             return e.getMessage();
         }
-    }
-
-    public static SecretKey toSecretKey(String encodedKey) {
-        byte[] decodedKey = Base64.getDecoder().decode(encodedKey.trim());
-        SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "DES");
-        return originalKey;
     }
 }

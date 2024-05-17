@@ -1,9 +1,9 @@
 package com.fedor;
 
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.util.Base64;
+import javax.crypto.KeyGenerator;
 import java.io.BufferedReader;
 import java.io.IOException;
 import com.fedor.Files;
@@ -16,15 +16,16 @@ public class Crypt {
     public static void launch() {
         Files files = new Files();
         String text = files.readfile("text.txt");
-        String[] textEncrypted = crypt(text);
+        String key = files.readfile("key.txt");
+        SecretKey nkey = files.toSecretKey(key);
+        String[] textEncrypted = crypt(text, nkey);
         files.writefile("encrypted.txt", textEncrypted[0]);
         files.writefile("key.txt", textEncrypted[1]);
     }
 
-    public static String[] crypt(String fileContent) {
+    public static String[] crypt(String fileContent, SecretKey myDesKey) {
         try {
             KeyGenerator keygenerator = KeyGenerator.getInstance("DES");
-            SecretKey myDesKey = keygenerator.generateKey();
             String key = Base64.getEncoder().encodeToString(myDesKey.getEncoded());
             Cipher desCipher = Cipher.getInstance("DES");
 
