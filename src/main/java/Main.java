@@ -1,39 +1,29 @@
 import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import com.fedor.Crypt;
+import com.fedor.Encrypt;
 
 public class Main {
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
+    Crypt crypt = new Crypt();
+    Encrypt encrypt = new Encrypt();
     System.out.println("Режимы работы: 0 - шифрование, 1 - расшифровка");
     System.out.print("Выберите режим работы: ");
     int mode = sc.nextInt();
+    System.out.println("Загрузка...");
+        System.out.print("\033[H\033[2J");
     switch (mode) {
       case 0:
-        System.out.println("Загрузка...");
-        comm("clear");
-        comm("java -classpath .:target/dependency/* Crypt");
+        crypt.launch();
         break;
       case 1:
-        System.out.println("Загрузка...");
-        comm("clear");
-        comm("java -classpath .:target/dependency/* Encrypt");
+        encrypt.launch();
         break;
-    }
-  }
-
-  public static void comm(String prc) {
-    try {
-      Process process = Runtime.getRuntime().exec(prc);
-      BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-      String line;
-      while ((line = reader.readLine()) != null) {
-        System.out.println(line);
-      }
-      process.waitFor();
-      reader.close();
-    } catch (Exception e) {
-      e.printStackTrace();
+      default:
+        System.out.println("Неверный режим работы");
+        break;
     }
   }
 }
