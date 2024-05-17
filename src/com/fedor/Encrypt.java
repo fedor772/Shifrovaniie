@@ -4,26 +4,29 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.io.BufferedReader;
+import java.util.Base64;
+import javax.crypto.spec.SecretKeySpec;
 import com.fedor.Files;
 
 public class Encrypt {
     public static void main(String[] args) {
         launch();
     }
+
     public static void launch() {
         Files files = new Files();
         String text = files.readfile("encrypted.txt");
-        System.out.println(encrypt(text));
+        String encodedkey = files.readfile("key.txt");
+        SecretKey key = toSecretKey(encodedkey);
+        System.out.println(encrypt(text, key));
     }
-    public static String encrypt (String file) {
-        try {
-            KeyGenerator keygenerator = KeyGenerator.getInstance("DES");
-            SecretKey myDesKey = keygenerator.generateKey();
 
+    public static String encrypt(String file, SecretKey key) {
+        try {
             Cipher desCipher = Cipher.getInstance("DES");
             byte[] encryptedText = file.getBytes("UTF8");
 
-            desCipher.init(Cipher.DECRYPT_MODE, myDesKey);
+            desCipher.init(Cipher.ENCRYPT_MODE, key);
             byte[] decryptedText = desCipher.doFinal(encryptedText);
 
             String decryptedString = new String(decryptedText);
@@ -31,5 +34,11 @@ public class Encrypt {
         } catch (Exception e) {
             return e.getMessage();
         }
+    }
+
+    public static SecretKey toSecretKey(String encodedKey) {
+        byte[] decodedKey = Base64.getDecoder().decode(encodedKey.trim());
+        SecretKey originalKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "DES");
+        return originalKey;
     }
 }

@@ -43,7 +43,7 @@ public class Crypt {
             String decryptedString = new String(textDecrypted, "UTF8");
             System.out.println(decryptedString);
             System.out.println("Ключ расшифровки: " + key);
-            String[] arr = { decryptedString, key };
+            String[] arr = { Base64.getEncoder().encodeToString(textEncrypted), key };
             return arr;
         } catch (Exception e) {
             System.err.println("Ошибка шифрования: " + e.getMessage());
