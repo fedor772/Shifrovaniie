@@ -24,12 +24,12 @@ public class Encrypt {
     public static String encrypt(String file, SecretKey key) {
         try {
             Cipher desCipher = Cipher.getInstance("DES");
-            byte[] encryptedText = file.getBytes("UTF8");
+            byte[] encryptedText = Base64.getMimeDecoder().decode(file);
 
-            desCipher.init(Cipher.ENCRYPT_MODE, key);
+            desCipher.init(Cipher.DECRYPT_MODE, key);
             byte[] decryptedText = desCipher.doFinal(encryptedText);
 
-            String decryptedString = new String(decryptedText);
+            String decryptedString = new String(decryptedText, "UTF8");
             return decryptedString;
         } catch (Exception e) {
             return e.getMessage();
